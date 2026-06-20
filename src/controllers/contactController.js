@@ -5,7 +5,7 @@ const Contact = require('../models/Contact');
 // @access  Public
 const addContact = async (req, res) => {
   try {
-    const { name, email, phone } = req.body;
+    const { name, email, phone, address, gender } = req.body;
 
     // Validation check (also handled by Mongoose schema, but custom message is nice)
     if (!name || !email || !phone) {
@@ -19,6 +19,8 @@ const addContact = async (req, res) => {
       name,
       email,
       phone,
+      address,
+      gender,
     });
 
     res.status(201).json({
@@ -104,7 +106,7 @@ const getContactById = async (req, res) => {
 // @access  Public
 const updateContact = async (req, res) => {
   try {
-    const { name, email, phone } = req.body;
+    const { name, email, phone, address, gender } = req.body;
 
     let contact = await Contact.findById(req.params.id);
 
@@ -118,7 +120,7 @@ const updateContact = async (req, res) => {
     // Update fields
     contact = await Contact.findByIdAndUpdate(
       req.params.id,
-      { name, email, phone },
+      { name, email, phone, address, gender },
       { new: true, runValidators: true }
     );
 

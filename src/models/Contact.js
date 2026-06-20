@@ -18,6 +18,14 @@ const contactSchema = new mongoose.Schema(
       required: [true, 'Please add a phone number'],
       trim: true,
     },
+    address: {
+      type: String,
+      trim: true,
+    },
+    gender: {
+      type: String,
+      trim: true,
+    },
   },
   {
     timestamps: true,

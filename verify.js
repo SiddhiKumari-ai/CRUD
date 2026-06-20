@@ -119,11 +119,14 @@ async function runTests() {
       name: 'John Doe',
       email: 'john@example.com',
       phone: '123-456-7890',
+      address: '123 Main St',
+      gender: 'Male',
     };
     const t2 = await makeRequest('/api/contacts', 'POST', newContact);
     console.log(`Status: ${t2.status}`);
     console.log(`Response:`, JSON.stringify(t2.data));
     if (t2.status !== 201 || !t2.data.success || !t2.data.data._id) throw new Error('Test 2 failed');
+    if (t2.data.data.address !== '123 Main St' || t2.data.data.gender !== 'Male') throw new Error('Test 2 failed: address or gender not saved');
     testContactId = t2.data.data._id;
 
     // Test 2b: Add a contact with duplicate email
@@ -153,6 +156,7 @@ async function runTests() {
     console.log(`Status: ${t4.status}`);
     console.log(`Response:`, JSON.stringify(t4.data));
     if (t4.status !== 200 || t4.data.data.name !== 'John Doe') throw new Error('Test 4 failed');
+    if (t4.data.data.address !== '123 Main St' || t4.data.data.gender !== 'Male') throw new Error('Test 4 failed: address or gender mismatch');
 
     // Test 5: Update the contact
     console.log(`\nTest 5: PUT /api/contacts/${testContactId} (Update contact)`);
@@ -160,11 +164,14 @@ async function runTests() {
       name: 'Johnathan Doe',
       email: 'johnathan@example.com',
       phone: '987-654-3210',
+      address: '456 Oak Ave',
+      gender: 'Other',
     };
     const t5 = await makeRequest(`/api/contacts/${testContactId}`, 'PUT', updatedContact);
     console.log(`Status: ${t5.status}`);
     console.log(`Response:`, JSON.stringify(t5.data));
     if (t5.status !== 200 || t5.data.data.name !== 'Johnathan Doe') throw new Error('Test 5 failed');
+    if (t5.data.data.address !== '456 Oak Ave' || t5.data.data.gender !== 'Other') throw new Error('Test 5 failed: updated address or gender mismatch');
 
     // Test 6: Delete the contact
     console.log(`\nTest 6: DELETE /api/contacts/${testContactId} (Delete contact)`);
